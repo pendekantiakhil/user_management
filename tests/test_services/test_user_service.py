@@ -70,7 +70,7 @@ async def test_update_user_valid_data(db_session, user):
 
 # Test updating a user with invalid data
 async def test_update_user_invalid_data(db_session, user):
-    updated_user = await UserService.update(db_session, user.id, {"email": "invalidemail"})
+    updated_user = await UserService.update(db_session, user.id, {"email": new_email, "nickname": "new_nickname"})
     assert updated_user is None
 
 # Test deleting a user who exists
