@@ -12,6 +12,14 @@ from app.utils.nickname_gen import generate_nickname
 def validate_url(url: Optional[str]) -> Optional[str]:
     if url is None:
         return url
+    url_regex = r'^https?:\/\/[^\s/$.?#].[^\s]*$'
+    if not re.match(url_regex, url):
+        raise ValueError('Invalid URL format')
+    return url
+
+def validate_image_extension(url: Optional[str]) -> Optional[str]:
+    if url is None:
+        return url
     url_regex = r'^https?:\/\/[^\s/$.?#].[^\s]*\.(jpg|jpeg|png)$'
     if not re.match(url_regex, url, re.IGNORECASE):
         raise ValueError('Invalid URL format or unsupported file extension. Only .jpg, .jpeg, and .png are allowed.')
@@ -29,6 +37,7 @@ class UserBase(BaseModel):
     role: UserRole
 
     _validate_urls = validator('profile_picture_url', 'linkedin_profile_url', 'github_profile_url', pre=True, allow_reuse=True)(validate_url)
+    _validate_image_extension = validator('profile_picture_url', pre=True, allow_reuse=True)(validate_image_extension)
  
     class Config:
         from_attributes = True
